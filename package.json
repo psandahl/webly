@@ -1,0 +1,29 @@
+{
+  "name": "webly",
+  "version": "1.0.0",
+  "description": "Playground to experiment with Typescript and WebGL2",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack",
+    "dev-server": "webpack serve"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/psandahl/webly.git"
+  },
+  "keywords": [],
+  "author": "Patrik Sandahl",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/psandahl/webly/issues"
+  },
+  "homepage": "https://github.com/psandahl/webly#readme",
+  "devDependencies": {
+    "ts-loader": "^9.2.3",
+    "typescript": "^4.3.5",
+    "webpack": "^5.44.0",
+    "webpack-cli": "^4.7.2",
+    "webpack-dev-server": "^3.11.2"
+  }
+}
