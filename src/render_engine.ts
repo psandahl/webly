@@ -11,6 +11,7 @@ export class RenderEngine {
      */
     public constructor() {
         this._canvas = createCanvasElement("rendercanvas");
+        this.resize();
         this._gl = this._canvas.getContext("webgl2") as WebGL2RenderingContext;
         if (this._gl === undefined) {
             throw new Error("Unable to create WebGL2");
