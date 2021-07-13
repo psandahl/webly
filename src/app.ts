@@ -1,9 +1,13 @@
 function onLoad() {
-    console.log("Window is loaded. Size: ", getWindowSize());
+    const [w, h] = getWindowSize();
+    const msg = `Window loaded with size width: ${w} and height: ${h}`;
+    document.body.innerHTML = msg;
 }
 
 function onResize() {
-    console.log("Window is resized. Size: ", getWindowSize());
+    const [w, h] = getWindowSize();
+    const msg = `Window resized with size width: ${w} and height: ${h}`;
+    document.body.innerHTML = msg;
 }
 
 // Get tuple [width, height]
