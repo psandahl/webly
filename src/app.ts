@@ -1,4 +1,7 @@
 import { getWindowSize } from './dom';
+import { RenderEngine } from './render_engine';
+
+let renderEngine: RenderEngine;
 
 window.onload = () => {
     const [w, h] = getWindowSize();
@@ -6,7 +9,10 @@ window.onload = () => {
 
     const p = document.createElement('p');
     p.textContent = msg;
-    document.body.appendChild(p);    
+    document.body.appendChild(p);
+
+    renderEngine = new RenderEngine();
+    renderEngine.start();
 }
 
 window.onresize = () => {
