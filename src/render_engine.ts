@@ -1,28 +1,31 @@
-export class RenderEngine {
-    private _frame = 0;
+import { createCanvasElement } from "./dom";
 
+export class RenderEngine {
+
+    private _gl: WebGL2RenderingContext;
+    private _frame: number;
+    
     public constructor() {
-        console.log("RenderEngine created");
+        const canvas = createCanvasElement([640, 480], "rendercanvas");
+        this._gl = canvas.getContext("webgl2") as WebGL2RenderingContext;
+        if (this._gl === undefined) {
+            throw new Error("Unable to create WebGL2");
+        }
+
+        document.body.appendChild(canvas);
+
+        this._frame = 0;
     }
 
     public start() {
-        // Initialize stuff.
         this.loop();
     }
 
     private loop() {
-        requestAnimationFrame(this.loop.bind(this));
-        ++this._frame;
+        const intensity = this._frame++ % 255;
 
-        const msg = `Frame counter is ${this._frame}`;
-        let p = document.getElementById('framecount');
-        if (p != null) {
-            p.textContent = msg;
-        } else {
-            p = document.createElement('p');
-            p.id = "framecount";
-            p.textContent = msg;
-            document.body.appendChild(p);
-        }
+        this._gl.clearColor(intensity / 255.0, 0.0, 0.0, 1.0);
+        this._gl.clear(this._gl.COLOR_BUFFER_BIT);
+        requestAnimationFrame(this.loop.bind(this));
     }
 };
