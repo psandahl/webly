@@ -18,4 +18,6 @@ window.onresize = () => {
     const msg = `Window resized with size width: ${w} and height: ${h}`;
 
     console.log(msg);
+
+    renderEngine.resize();
 }
