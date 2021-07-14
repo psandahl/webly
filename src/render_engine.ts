@@ -1,10 +1,11 @@
 import { createCanvasElement, getWindowSize } from "./dom";
+import { compileShaderProgram } from "./compiler";
 
 export class RenderEngine {
 
     private _canvas: HTMLCanvasElement;
     private _gl: WebGL2RenderingContext;
-    private _frame: number;
+    private _program0: WebGLProgram;
     
     /**
      * Create a RenderEngine.
@@ -17,15 +18,23 @@ export class RenderEngine {
             throw new Error("Unable to create WebGL2");
         }
 
-        document.body.appendChild(this._canvas);
+        const [succ, program] = compileShaderProgram(this._gl, this._vs0, this._fs0);
+        if (!succ) {
+            throw new Error("Failed to compile shader program");
+        }
 
-        this._frame = 0;
+        this._program0 = program;
+
+        document.body.appendChild(this._canvas);        
     }
 
     /**
      * Start the engine.
      */
-    public start() {
+    public start() {        
+
+        this._gl.clearColor(0.0, 0.0, 0.0, 1.0);
+
         this.loop();
     }
 
@@ -42,10 +51,32 @@ export class RenderEngine {
     }
 
     private loop() {
-        const intensity = this._frame++ % 255;
-
-        this._gl.clearColor(intensity / 255.0, 0.0, 0.0, 1.0);
+        
         this._gl.clear(this._gl.COLOR_BUFFER_BIT);
+        this._gl.useProgram(this._program0);
+        
         requestAnimationFrame(this.loop.bind(this));
     }
+
+    private _vs0 = 
+    `#version 300 es
+
+in vec3 a_position;
+
+void main() {
+    gl_Position = vec4(a_position, 1);
+}
+`;
+
+    private _fs0 =
+    `#version 300 es
+
+precision highp float;
+    
+out vec4 color;
+
+void main() {
+    color = vec4(1, 0, 0.5, 1);
+}
+`;
 };
