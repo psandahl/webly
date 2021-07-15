@@ -42,21 +42,16 @@ export class RenderEngine {
         this._gl.bufferData(this._gl.ARRAY_BUFFER, new Float32Array(this._attr0), this._gl.STATIC_DRAW);
 
         // Setup vao.
-        const positionAttributeLocation = this._gl.getAttribLocation(this._program0, "a_position");
-        console.log(`a_position num: ${positionAttributeLocation}`);
-        const colorAttributeLocation = this._gl.getAttribLocation(this._program0, "a_color");
-        console.log(`a_color num: ${colorAttributeLocation}`);
-
         this._vao0 = this._gl.createVertexArray()!;
         this._gl.bindVertexArray(this._vao0);
 
         // Position.
-        this._gl.enableVertexAttribArray(positionAttributeLocation);
-        this._gl.vertexAttribPointer(positionAttributeLocation, 2, this._gl.FLOAT, false, 5 * 4, 0);
+        this._gl.enableVertexAttribArray(0);
+        this._gl.vertexAttribPointer(0, 2, this._gl.FLOAT, false, 5 * 4, 0);
 
         // Color.
-        this._gl.enableVertexAttribArray(colorAttributeLocation);
-        this._gl.vertexAttribPointer(colorAttributeLocation, 3, this._gl.FLOAT, false, 5 * 4, 2 * 4);
+        this._gl.enableVertexAttribArray(1);
+        this._gl.vertexAttribPointer(1, 3, this._gl.FLOAT, false, 5 * 4, 2 * 4);
 
         this.loop();
     }
@@ -100,8 +95,8 @@ export class RenderEngine {
     private _vs0 = 
     `#version 300 es
 
-in vec4 a_position;
-in vec3 a_color;
+layout (location = 0) in vec4 a_position;
+layout (location = 1) in vec3 a_color;
 
 out vec3 v_color;
 
