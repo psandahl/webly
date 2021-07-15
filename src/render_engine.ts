@@ -1,99 +1,91 @@
 import { createCanvasElement, getWindowSize } from "./dom";
 import { compileShaderProgram } from "./compiler";
+import { BufferSet } from "./buffer_set";
 
 export class RenderEngine {
+  private _canvas: HTMLCanvasElement;
+  private _gl: WebGL2RenderingContext;
+  private _program0: WebGLProgram = null!;
 
-    private _canvas: HTMLCanvasElement;
-    private _gl: WebGL2RenderingContext;
-    private _program0: WebGLProgram = null!;
-    
-    /**
-     * Create a RenderEngine.
-     */
-    public constructor() {
-        this._canvas = createCanvasElement("rendercanvas");
-        this.resize();
-        this._gl = this._canvas.getContext("webgl2") as WebGL2RenderingContext;
-        if (this._gl === undefined) {
-            throw new Error("Unable to create WebGL2");
-        }
-
-        document.body.appendChild(this._canvas);
-
-        console.log(`Max number of vertex attributes: ${this._gl.getParameter(this._gl.MAX_VERTEX_ATTRIBS)}`);
+  /**
+   * Create a RenderEngine.
+   */
+  public constructor() {
+    this._canvas = createCanvasElement("rendercanvas");
+    this.resize();
+    this._gl = this._canvas.getContext("webgl2") as WebGL2RenderingContext;
+    if (this._gl === undefined) {
+      throw new Error("Unable to create WebGL2");
     }
 
-    /**
-     * Start the engine.
-     */
-    public start() {
+    document.body.appendChild(this._canvas);
 
-        // Compile program.
-        const [succ, program] = compileShaderProgram(this._gl, this._vs0, this._fs0);
-        if (!succ) {
-            throw new Error("Failed to compile shader program");
-        }
-        
-        this._program0 = program;
+    console.log(
+      `Max number of vertex attributes: ${this._gl.getParameter(
+        this._gl.MAX_VERTEX_ATTRIBS
+      )}`
+    );
+  }
 
-        // Create and populate position buffer.
-        this._attrBuf0 = this._gl.createBuffer()!;
-        this._gl.bindBuffer(this._gl.ARRAY_BUFFER, this._attrBuf0);
-        this._gl.bufferData(this._gl.ARRAY_BUFFER, new Float32Array(this._attr0), this._gl.STATIC_DRAW);
-
-        // Setup vao.
-        this._vao0 = this._gl.createVertexArray()!;
-        this._gl.bindVertexArray(this._vao0);
-
-        // Position.
-        this._gl.enableVertexAttribArray(0);
-        this._gl.vertexAttribPointer(0, 2, this._gl.FLOAT, false, 5 * 4, 0);
-
-        // Color.
-        this._gl.enableVertexAttribArray(1);
-        this._gl.vertexAttribPointer(1, 3, this._gl.FLOAT, false, 5 * 4, 2 * 4);
-
-        this.loop();
+  /**
+   * Start the engine.
+   */
+  public start() {
+    // Compile program.
+    const [succ, program] = compileShaderProgram(
+      this._gl,
+      this._vs0,
+      this._fs0
+    );
+    if (!succ) {
+      throw new Error("Failed to compile shader program");
     }
 
-    /**
-     * Act on a window resize.
-     */
-    public resize() {
-        if (this._canvas !== undefined) {
-            console.log("Catch resize event");
-            const [width, height] = getWindowSize();
-            this._canvas.width = width;
-            this._canvas.height = height;
-        }
+    this._program0 = program;
+
+    // Create buffer set.
+    this._bufferSet0 = new BufferSet(
+      this._gl,
+      [2, 3],
+      [
+        0.0, 0.25, 1.0, 0.0, 0.0, 
+        -0.1, -0.1, 0.0, 1.0, 0.0, 
+        0.4, -0.4, 0.0, 0.0, 1.0,
+      ]
+    );
+
+    this.loop();
+  }
+
+  /**
+   * Act on a window resize.
+   */
+  public resize() {
+    if (this._canvas !== undefined) {
+      console.log("Catch resize event");
+      const [width, height] = getWindowSize();
+      this._canvas.width = width;
+      this._canvas.height = height;
     }
+  }
 
-    private loop() {
-        
-        const [width, height] = getWindowSize();
+  private loop() {
+    const [width, height] = getWindowSize();
 
-        this._gl.clearColor(0.0, 0.0, 0.0, 1.0);
-        this._gl.viewport(0, 0, width, height);
-        this._gl.clear(this._gl.COLOR_BUFFER_BIT);
+    this._gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    this._gl.viewport(0, 0, width, height);
+    this._gl.clear(this._gl.COLOR_BUFFER_BIT);
 
-        this._gl.useProgram(this._program0);
-        this._gl.bindVertexArray(this._vao0);
-        this._gl.drawArrays(this._gl.TRIANGLES, 0, 3);
+    this._gl.useProgram(this._program0);
+    this._bufferSet0.bind();
+    this._gl.drawArrays(this._gl.TRIANGLES, 0, 3);
 
-        requestAnimationFrame(this.loop.bind(this));
-    }
+    requestAnimationFrame(this.loop.bind(this));
+  }
 
-    private _attr0 = [
-        0.0, 0.25, 1.0, 0.0, 0.0,
-        -0.1, -0.1, 0.0, 1.0, 0.0,
-        0.4, -0.4, 0.0, 0.0, 1.0
-    ];
+  private _bufferSet0: BufferSet = null!;
 
-    private _attrBuf0: WebGLBuffer = null!;
-    private _vao0: WebGLVertexArrayObject = null!;
-
-    private _vs0 = 
-    `#version 300 es
+  private _vs0 = `#version 300 es
 
 layout (location = 0) in vec4 a_position;
 layout (location = 1) in vec3 a_color;
@@ -106,8 +98,7 @@ void main() {
 }
 `;
 
-    private _fs0 =
-    `#version 300 es
+  private _fs0 = `#version 300 es
 
 precision highp float;
   
@@ -118,4 +109,4 @@ void main() {
     color = vec4(v_color, 1);
 }
 `;
-};
+}
