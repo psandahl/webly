@@ -1,12 +1,9 @@
 import { createCanvasElement, getWindowSize } from "./dom";
 import { compileShaderProgram } from "./compiler";
 import { BufferSet } from "./buffer_set";
+import { shaderSource } from "./shaders";
 
 export class RenderEngine {
-  private _canvas: HTMLCanvasElement;
-  private _gl: WebGL2RenderingContext;
-  private _program0: WebGLProgram = null!;
-
   /**
    * Create a RenderEngine.
    */
@@ -34,8 +31,8 @@ export class RenderEngine {
     // Compile program.
     const [succ, program] = compileShaderProgram(
       this._gl,
-      this._vs0,
-      this._fs0
+      shaderSource("colored.vs"),
+      shaderSource("colored.fs")
     );
     if (!succ) {
       throw new Error("Failed to compile shader program");
@@ -48,9 +45,8 @@ export class RenderEngine {
       this._gl,
       [2, 3],
       [
-        0.0, 0.25, 1.0, 0.0, 0.0, 
-        -0.1, -0.1, 0.0, 1.0, 0.0, 
-        0.4, -0.4, 0.0, 0.0, 1.0,
+        0.0, 0.25, 1.0, 0.0, 0.0, -0.1, -0.1, 0.0, 1.0, 0.0, 0.4, -0.4, 0.0,
+        0.0, 1.0,
       ]
     );
 
@@ -83,30 +79,8 @@ export class RenderEngine {
     requestAnimationFrame(this.loop.bind(this));
   }
 
+  private _canvas: HTMLCanvasElement;
+  private _gl: WebGL2RenderingContext;
+  private _program0: WebGLProgram = null!;
   private _bufferSet0: BufferSet = null!;
-
-  private _vs0 = `#version 300 es
-
-layout (location = 0) in vec4 a_position;
-layout (location = 1) in vec3 a_color;
-
-out vec3 v_color;
-
-void main() {
-    v_color = a_color;
-    gl_Position = a_position;
-}
-`;
-
-  private _fs0 = `#version 300 es
-
-precision highp float;
-  
-in vec3 v_color;
-out vec4 color;
-
-void main() {
-    color = vec4(v_color, 1);
-}
-`;
 }
