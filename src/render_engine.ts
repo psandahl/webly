@@ -29,14 +29,11 @@ export class RenderEngine {
    */
   public start(): void {
     // Compile program.
-    const [succ, program] = compileShaderProgram(
+    const program = compileShaderProgram(
       this._gl,
       shaderSource("colored.vs"),
       shaderSource("colored.fs")
-    );
-    if (!succ) {
-      throw new Error("Failed to compile shader program");
-    }
+    );    
 
     this._program0 = program;
 

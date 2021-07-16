@@ -1,4 +1,4 @@
-import { getWindowSize } from "./dom";
+import { getWindowSize, clearBody } from "./dom";
 import { RenderEngine } from "./render_engine";
 
 let renderEngine: RenderEngine;
@@ -9,8 +9,17 @@ window.onload = () => {
 
   console.log(msg);
 
-  renderEngine = new RenderEngine();
-  renderEngine.start();
+  try {
+    renderEngine = new RenderEngine();
+    renderEngine.start();
+  } catch (error) {
+    console.error(error);
+    clearBody();
+
+    const elem = document.createElement("h3");
+    elem.innerText = error;
+    document.body.appendChild(elem);
+  }
 };
 
 window.onresize = () => {

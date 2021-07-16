@@ -16,3 +16,12 @@ export function createCanvasElement(elementId: string): HTMLCanvasElement {
 
   return canvas;
 }
+
+/**
+ * Make body clean.
+ */
+export function clearBody(): void {
+  while (document.body.firstChild) {
+    document.body.removeChild(document.body.lastChild!);
+  }
+}
