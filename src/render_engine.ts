@@ -72,6 +72,8 @@ export class RenderEngine {
     this._gl.viewport(0, 0, width, height);
     this._gl.clear(this._gl.COLOR_BUFFER_BIT);
 
+    this._gl.enable(this._gl.CULL_FACE);
+    this._gl.cullFace(this._gl.BACK);
     this._gl.useProgram(this._program0);
     this._bufferSet0.bind();
     this._gl.drawArrays(this._gl.TRIANGLES, 0, 3);
