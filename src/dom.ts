@@ -25,3 +25,10 @@ export function clearBody(): void {
     document.body.removeChild(document.body.lastChild!);
   }
 }
+
+/**
+ * Append a node to the body.
+ */
+export function appendBody(node: ChildNode): void {
+  document.body.appendChild(node);
+}
