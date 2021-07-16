@@ -44,7 +44,7 @@ export function compileShaderProgram(
 function deleteShaderProgram(
   gl: WebGL2RenderingContext,
   program: WebGLProgram
-) {
+): void {
   gl.deleteProgram(program);
 }
 

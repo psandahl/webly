@@ -27,7 +27,7 @@ export class RenderEngine {
   /**
    * Start the engine.
    */
-  public start() {
+  public start(): void {
     // Compile program.
     const [succ, program] = compileShaderProgram(
       this._gl,
@@ -56,7 +56,7 @@ export class RenderEngine {
   /**
    * Act on a window resize.
    */
-  public resize() {
+  public resize(): void {
     if (this._canvas !== undefined) {
       console.log("Catch resize event");
       const [width, height] = getWindowSize();
@@ -65,7 +65,7 @@ export class RenderEngine {
     }
   }
 
-  private loop() {
+  private loop(): void {
     const [width, height] = getWindowSize();
 
     this._gl.clearColor(0.0, 0.0, 0.0, 1.0);

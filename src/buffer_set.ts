@@ -31,7 +31,7 @@ export class BufferSet {
     this._gl = gl;
   }
 
-  public bind() {
+  public bind(): void {
     this._gl.bindVertexArray(this._vao);
   }
 
