@@ -1,7 +1,5 @@
 import { appendBody, getWindowSize, createCanvasElement } from "./dom";
 
-type Entity = any;
-
 export class GLContext {
   public constructor() {
     this._canvas = createCanvasElement("render-canvas");
@@ -56,7 +54,9 @@ export class GLContext {
     this._gl.viewport(0, 0, width, height);
     this._gl.clear(this._gl.COLOR_BUFFER_BIT);
 
-    this._entities.forEach((entity) => {});
+    this._entities.forEach((entity) => {
+      entity.render(this._gl);
+    });
 
     requestAnimationFrame(this.render.bind(this));
   }
