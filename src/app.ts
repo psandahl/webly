@@ -1,5 +1,8 @@
-import { getWindowSize, clearBody } from "./dom";
+import { getWindowSize, clearBody, appendBody } from "./dom";
+import { GLContext } from "./gl_context";
 import { RenderEngine } from "./render_engine";
+
+let glContext: GLContext;
 
 let renderEngine: RenderEngine;
 
@@ -10,15 +13,16 @@ window.onload = () => {
   console.log(msg);
 
   try {
-    renderEngine = new RenderEngine();
-    renderEngine.start();
+    glContext = new GLContext();
+
+    glContext.enterRenderLoop();
   } catch (error) {
     console.error(error);
     clearBody();
 
     const elem = document.createElement("h3");
     elem.innerText = error;
-    document.body.appendChild(elem);
+    appendBody(elem);
   }
 };
 
@@ -28,5 +32,7 @@ window.onresize = () => {
 
   console.log(msg);
 
-  renderEngine.resize();
+  if (glContext !== undefined) {
+    glContext.handleResize();
+  }
 };

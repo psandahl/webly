@@ -28,10 +28,19 @@ export class GLContext {
     }
   }
 
-  public render(entities: Entity[]): void {
-    this._gl.clear(this._gl.COLOR_BUFFER_BIT);
+  /**
+   * Set new entities.
+   * @param entities New entities.
+   */
+  public setEntities(entities: Entity[]): void {
+    this._entities = entities;
+  }
 
-    entities.forEach((entity) => {});
+  /**
+   * Enter the render loop.
+   */
+  public enterRenderLoop(): void {
+    this.render();
   }
 
   /**
@@ -40,6 +49,16 @@ export class GLContext {
    */
   public glContext(): WebGL2RenderingContext {
     return this._gl;
+  }
+
+  private render(): void {
+    const [width, height] = getWindowSize();
+    this._gl.viewport(0, 0, width, height);
+    this._gl.clear(this._gl.COLOR_BUFFER_BIT);
+
+    this._entities.forEach((entity) => {});
+
+    requestAnimationFrame(this.render.bind(this));
   }
 
   private initialGLSetup(): void {
@@ -51,4 +70,5 @@ export class GLContext {
 
   private _gl: WebGL2RenderingContext;
   private _canvas: HTMLCanvasElement;
+  private _entities: Entity[] = [];
 }
