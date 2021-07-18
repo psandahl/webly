@@ -1,8 +1,10 @@
 import { getWindowSize, clearBody, appendBody } from "./dom";
 import { GLContext } from "./gl_context";
 import { RenderEngine } from "./render_engine";
+import { SimpleBuilding } from "./simple_building";
 
 let glContext: GLContext;
+let simpleBuilding: SimpleBuilding;
 
 let renderEngine: RenderEngine;
 
@@ -14,7 +16,9 @@ window.onload = () => {
 
   try {
     glContext = new GLContext();
+    simpleBuilding = new SimpleBuilding(glContext.gl());
 
+    glContext.setEntities([simpleBuilding]);
     glContext.enterRenderLoop();
   } catch (error) {
     console.error(error);

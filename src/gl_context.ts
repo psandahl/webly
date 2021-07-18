@@ -45,7 +45,7 @@ export class GLContext {
    * Get the GL context.
    * @returns The GL context
    */
-  public glContext(): WebGL2RenderingContext {
+  public gl(): WebGL2RenderingContext {
     return this._gl;
   }
 

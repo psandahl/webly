@@ -35,6 +35,10 @@ export class BufferSet {
     this._gl.bindVertexArray(this._vao);
   }
 
+  public unbind(): void {
+    this._gl.bindVertexArray(null);
+  }
+
   private _buf: WebGLBuffer;
   private _vao: WebGLVertexArrayObject;
   private _gl: WebGL2RenderingContext;
