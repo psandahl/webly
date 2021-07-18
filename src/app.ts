@@ -1,12 +1,9 @@
 import { getWindowSize, clearBody, appendBody } from "./dom";
 import { GLContext } from "./gl_context";
-import { RenderEngine } from "./render_engine";
 import { SimpleBuilding } from "./simple_building";
 
 let glContext: GLContext;
 let simpleBuilding: SimpleBuilding;
-
-let renderEngine: RenderEngine;
 
 window.onload = () => {
   const [w, h] = getWindowSize();
