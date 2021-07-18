@@ -1,6 +1,8 @@
 import { BufferSet } from "./buffer_set";
 import { compileShaderProgram } from "./compiler";
 
+import { Matrix4 } from "@math.gl/core";
+
 export class SimpleBuilding implements Entity {
   public constructor(gl: WebGL2RenderingContext) {
     this._bufferSet = new BufferSet(gl, [3, 3], this._data);
@@ -9,11 +11,27 @@ export class SimpleBuilding implements Entity {
       this._vertexShader,
       this._fragmentShader
     );
+
+    this._projectionMatrix = new Matrix4().identity();
+    this._projectionMatrixU = gl.getUniformLocation(
+      this._program,
+      "u_projectionMatrix"
+    )!;
+
+    this._viewMatrix = new Matrix4().identity();
+    this._viewMatrixU = gl.getUniformLocation(this._program, "u_viewMatrix")!;
+
+    this._modelMatrix = new Matrix4().identity();
+    this._modelMatrixU = gl.getUniformLocation(this._program, "u_modelMatrix")!;
   }
 
   public render(gl: WebGL2RenderingContext): void {
     this._bufferSet.bind();
     gl.useProgram(this._program);
+
+    gl.uniformMatrix4fv(this._projectionMatrixU, false, this._projectionMatrix);
+    gl.uniformMatrix4fv(this._viewMatrixU, false, this._viewMatrix);
+    gl.uniformMatrix4fv(this._modelMatrixU, false, this._modelMatrix);
 
     gl.drawArrays(gl.TRIANGLES, 0, this._data.length / 6);
 
@@ -23,6 +41,12 @@ export class SimpleBuilding implements Entity {
 
   private _bufferSet: BufferSet;
   private _program: WebGLProgram;
+  private _projectionMatrix: Matrix4;
+  private _projectionMatrixU: WebGLUniformLocation;
+  private _viewMatrix: Matrix4;
+  private _viewMatrixU: WebGLUniformLocation;
+  private _modelMatrix: Matrix4;
+  private _modelMatrixU: WebGLUniformLocation;
 
   // Per vertex: x y z r g b
   private readonly _data = [
@@ -35,11 +59,17 @@ export class SimpleBuilding implements Entity {
 layout (location = 0) in vec4 a_position;
 layout (location = 1) in vec3 a_color;
 
+uniform mat4 u_projectionMatrix;
+uniform mat4 u_viewMatrix;
+uniform mat4 u_modelMatrix;
+
 out vec3 v_color;
 
 void main() {
+  mat4 mat = u_projectionMatrix * u_viewMatrix * u_modelMatrix;
+
   v_color = a_color;
-  gl_Position = a_position;
+  gl_Position = mat * a_position;
 }`;
 
   private readonly _fragmentShader = `#version 300 es
