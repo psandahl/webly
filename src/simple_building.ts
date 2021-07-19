@@ -75,8 +75,11 @@ export class SimpleBuilding implements Entity {
 
   // Per vertex: x y z r g b
   private readonly _data = [
-    0.0, 0.25, 0.0, 1.0, 0.0, 0.0, 0.1, -0.3, 0.0, 0.0, 1.0, 0.0, 0.5, 0.1, 0.0,
-    0.0, 0.0, 1.0,
+    0.0, 2.0, -8.0, 1.0, 0.0, 0.0,
+
+    -1.0, -2.0, -8.0, 0.0, 1.0, 0.0,
+
+    3.0, 0.0, -8.0, 0.0, 0.0, 1.0,
   ];
 
   private readonly _vertexShader = `#version 300 es
