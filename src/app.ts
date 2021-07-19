@@ -89,9 +89,7 @@ window.onload = () => {
     simpleBuilding.setViewMatrix(viewMatrix());
 
     glContext.setEntities([simpleBuilding]);
-    glContext.enterRenderLoop();
-
-    console.log((3 * Math.PI) % (2 * Math.PI));
+    glContext.enterRenderLoop();    
   } catch (error) {
     console.error(error);
     clearBody();

@@ -52,7 +52,7 @@ export class GLContext {
   private render(): void {
     const [width, height] = getWindowSize();
     this._gl.viewport(0, 0, width, height);
-    this._gl.clear(this._gl.COLOR_BUFFER_BIT);
+    this._gl.clear(this._gl.COLOR_BUFFER_BIT | this._gl.DEPTH_BUFFER_BIT);
 
     this._entities.forEach((entity) => {
       entity.render(this._gl);
@@ -66,6 +66,7 @@ export class GLContext {
     this._gl.frontFace(this._gl.CCW);
     this._gl.enable(this._gl.CULL_FACE);
     this._gl.cullFace(this._gl.BACK);
+    this._gl.enable(this._gl.DEPTH_TEST);
   }
 
   private _gl: WebGL2RenderingContext;
