@@ -2,6 +2,7 @@ import { BufferSet } from "./buffer_set";
 import { compileShaderProgram } from "./compiler";
 
 import { Matrix4 } from "@math.gl/core";
+import Matrix from "@math.gl/core/src/classes/base/matrix";
 
 export class SimpleBuilding implements Entity {
   public constructor(gl: WebGL2RenderingContext) {
@@ -29,14 +30,38 @@ export class SimpleBuilding implements Entity {
     this._bufferSet.bind();
     gl.useProgram(this._program);
 
-    gl.uniformMatrix4fv(this._projectionMatrixU, false, this._projectionMatrix);
-    gl.uniformMatrix4fv(this._viewMatrixU, false, this._viewMatrix);
-    gl.uniformMatrix4fv(this._modelMatrixU, false, this._modelMatrix);
+    gl.uniformMatrix4fv(
+      this._projectionMatrixU,
+      false,
+      this._projectionMatrix.toFloat32Array()
+    );
+    gl.uniformMatrix4fv(
+      this._viewMatrixU,
+      false,
+      this._viewMatrix.toFloat32Array()
+    );
+    gl.uniformMatrix4fv(
+      this._modelMatrixU,
+      false,
+      this._modelMatrix.toFloat32Array()
+    );
 
     gl.drawArrays(gl.TRIANGLES, 0, this._data.length / 6);
 
     gl.useProgram(null);
     this._bufferSet.unbind();
+  }
+
+  public setProjectionMatrix(mat: Matrix4): void {
+    this._projectionMatrix = mat;
+  }
+
+  public setViewMatrix(mat: Matrix4): void {
+    this._viewMatrix = mat;
+  }
+
+  public setModelMatrix(mat: Matrix4): void {
+    this._modelMatrix = mat;
   }
 
   private _bufferSet: BufferSet;
