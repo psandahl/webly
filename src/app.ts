@@ -20,6 +20,10 @@ function projectionMatrix(): Matrix4 {
   return new Matrix4().perspective(param);
 }
 
+function viewMatrix(): Matrix4 {
+  return new Matrix4().lookAt([20, 10, 20], [0, 0, 0], [0, 1, 0]);
+}
+
 window.onload = () => {
   const [w, h] = getWindowSize();
   const msg = `Window loaded with size width: ${w} and height: ${h}`;
@@ -30,6 +34,7 @@ window.onload = () => {
     glContext = new GLContext();
     simpleBuilding = new SimpleBuilding(glContext.gl());
     simpleBuilding.setProjectionMatrix(projectionMatrix());
+    simpleBuilding.setViewMatrix(viewMatrix());
 
     glContext.setEntities([simpleBuilding]);
     glContext.enterRenderLoop();

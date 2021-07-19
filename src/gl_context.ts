@@ -62,7 +62,7 @@ export class GLContext {
   }
 
   private initialGLSetup(): void {
-    this._gl.clearColor(0, 0, 0, 1);
+    this._gl.clearColor(0.9, 0.9, 0.9, 1);
     this._gl.frontFace(this._gl.CCW);
     this._gl.enable(this._gl.CULL_FACE);
     this._gl.cullFace(this._gl.BACK);
