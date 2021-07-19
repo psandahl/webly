@@ -7,6 +7,10 @@ import { Matrix4, toRadians } from "@math.gl/core";
 let glContext: GLContext;
 let simpleBuilding: SimpleBuilding;
 
+let mouseTracking = false;
+let mouseX = 0;
+let mouseY = 0;
+
 function projectionMatrix(): Matrix4 {
   const [w, h] = getWindowSize();
   const aspect = w / h;
@@ -32,6 +36,37 @@ window.onload = () => {
 
   try {
     glContext = new GLContext();
+
+    const canvas = document.getElementById(
+      "render-canvas"
+    ) as HTMLCanvasElement;
+
+    canvas.addEventListener("mousedown", (e) => {
+      if (e.button == 0) {
+        mouseTracking = true;
+        mouseX = e.offsetX;
+        mouseY = e.offsetY;
+      }
+    });
+
+    canvas.addEventListener("mousemove", (e) => {
+      if (mouseTracking) {
+        const deltaX = e.offsetX - mouseX;
+        const deltaY = e.offsetY - mouseY;
+
+        console.log(`deltaX: ${deltaX} deltaY: ${deltaY}`);
+
+        mouseX = e.offsetX;
+        mouseY = e.offsetY;
+      }
+    });
+
+    canvas.addEventListener("mouseup", (e) => {
+      if (e.button == 0) {
+        mouseTracking = false;
+      }
+    });
+
     simpleBuilding = new SimpleBuilding(glContext.gl());
     simpleBuilding.setProjectionMatrix(projectionMatrix());
     simpleBuilding.setViewMatrix(viewMatrix());
