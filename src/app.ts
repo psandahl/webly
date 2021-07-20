@@ -29,8 +29,8 @@ function projectionMatrix(): Matrix4 {
 }
 
 function viewMatrix(): Matrix4 {
-  const x = Math.cos(azimuth);
-  const z = Math.sin(azimuth);
+  const x = Math.sin(azimuth);
+  const z = Math.cos(azimuth);
   const y = Math.tan(elevation);
 
   const vec = new Vector3(x, y, z).normalize();
@@ -68,7 +68,7 @@ window.onload = () => {
         mouseY = e.offsetY;
 
         const [w, h] = getWindowSize();
-        azimuth += (deltaX / w) * (2 * Math.PI);
+        azimuth -= (deltaX / w) * (2 * Math.PI);
         azimuth = azimuth % (2 * Math.PI);
 
         elevation += (deltaY / h) * (2 * Math.PI);
@@ -89,7 +89,7 @@ window.onload = () => {
     simpleBuilding.setViewMatrix(viewMatrix());
 
     glContext.setEntities([simpleBuilding]);
-    glContext.enterRenderLoop();    
+    glContext.enterRenderLoop();
   } catch (error) {
     console.error(error);
     clearBody();
