@@ -1,9 +1,9 @@
 import { appendBody, getWindowSize, createCanvasElement } from "./dom";
 
 export class GLContext {
-  public constructor() {
+  public constructor(size: [number, number]) {
     this._canvas = createCanvasElement("render-canvas");
-    this.handleResize();
+    this.setSize(size);
 
     this._gl = this._canvas.getContext("webgl2") as WebGL2RenderingContext;
     if (this._gl !== undefined) {
@@ -16,11 +16,12 @@ export class GLContext {
   }
 
   /**
-   * Handle window resize event.
+   * Set new size.
+   * @param size
    */
-  public handleResize(): void {
+  public setSize(size: [number, number]): void {
     if (this._canvas !== undefined) {
-      const [width, height] = getWindowSize();
+      const [width, height] = size;
       this._canvas.width = width;
       this._canvas.height = height;
     }
@@ -47,6 +48,14 @@ export class GLContext {
    */
   public gl(): WebGL2RenderingContext {
     return this._gl;
+  }
+
+  /**
+   * Get canvas.
+   * @returns The canvas
+   */
+  public canvas(): HTMLCanvasElement {
+    return this._canvas;
   }
 
   private render(): void {
