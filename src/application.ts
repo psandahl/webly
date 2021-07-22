@@ -1,4 +1,5 @@
 import { GLContext } from "./gl_context";
+import { ImageDisplay } from "./image_display";
 import { SimpleBuilding } from "./simple_building";
 
 import { Matrix4, Vector3, Vector4, clamp, toRadians } from "@math.gl/core";
@@ -9,6 +10,7 @@ export class Application {
     this.windowSize = windowSize;
     this.glContext = new GLContext(this.displayAspectRatio, windowSize);
     this.simpleBuilding = new SimpleBuilding(this.glContext.getGl());
+    this.imageDisplay = new ImageDisplay(this.glContext.getGl());
   }
 
   /**
@@ -18,7 +20,7 @@ export class Application {
     this.simpleBuilding.setProjectionMatrix(this.projectionMatrix());
     this.simpleBuilding.setViewMatrix(this.viewMatrix());
 
-    this.glContext.setEntities([this.simpleBuilding]);
+    this.glContext.setEntities([this.imageDisplay, this.simpleBuilding]);
     this.glContext.enterRenderLoop();
   }
 
@@ -29,7 +31,7 @@ export class Application {
   public setWindowSize(windowSize: [number, number]): void {
     this.windowSize = windowSize;
     this.glContext.setWindowSize(windowSize);
-    this.simpleBuilding.setProjectionMatrix(this.projectionMatrix());
+    //this.simpleBuilding.setProjectionMatrix(this.projectionMatrix());
   }
 
   /**
@@ -80,6 +82,7 @@ export class Application {
   private displayAspectRatio = 1.0;
   private windowSize: [number, number];
   private glContext: GLContext;
+  private imageDisplay: ImageDisplay;
   private simpleBuilding: SimpleBuilding;
   private azimuth = 0.0;
   private elevation = 0.0;
