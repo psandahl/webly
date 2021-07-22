@@ -7,7 +7,7 @@ export class Application {
   public constructor(size: [number, number]) {
     this.size = size;
     this.glContext = new GLContext(size);
-    this.simpleBuilding = new SimpleBuilding(this.glContext.gl());
+    this.simpleBuilding = new SimpleBuilding(this.glContext.getGl());
   }
 
   /**
@@ -52,7 +52,7 @@ export class Application {
    * Get the applications rendering canvas.
    */
   public canvas(): HTMLCanvasElement {
-    return this.glContext.canvas();
+    return this.glContext.getCanvas();
   }
 
   private projectionMatrix(): Matrix4 {
