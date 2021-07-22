@@ -6,7 +6,7 @@ import { Matrix4, Vector3, Vector4, clamp, toRadians } from "@math.gl/core";
 export class Application {
   public constructor(size: [number, number]) {
     this.size = size;
-    this.glContext = new GLContext(size);
+    this.glContext = new GLContext(1920.0 / 1280.0, size);
     this.simpleBuilding = new SimpleBuilding(this.glContext.getGl());
   }
 

@@ -9,9 +9,9 @@ let mouseY = 0;
 
 window.onload = () => {
   const [w, h] = getWindowSize();
-  const msg = `Window loaded with size width: ${w} and height: ${h}`;
+  //const msg = `Window loaded with size width: ${w} and height: ${h}`;
 
-  console.log(msg);
+  //console.log(msg);
 
   try {
     application = new Application([w, h]);
@@ -57,9 +57,9 @@ window.onload = () => {
 
 window.onresize = () => {
   const [w, h] = getWindowSize();
-  const msg = `Window resized with size width: ${w} and height: ${h}`;
+  //const msg = `Window resized with size width: ${w} and height: ${h}`;
 
-  console.log(msg);
+  //console.log(msg);
 
   if (application !== undefined) {
     application.setSize([w, h]);
