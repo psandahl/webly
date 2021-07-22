@@ -8,13 +8,8 @@ let mouseX = 0;
 let mouseY = 0;
 
 window.onload = () => {
-  const [w, h] = getWindowSize();
-  //const msg = `Window loaded with size width: ${w} and height: ${h}`;
-
-  //console.log(msg);
-
   try {
-    application = new Application([w, h]);
+    application = new Application(getWindowSize());
     application.run();
 
     const canvas = application.canvas();
@@ -56,12 +51,7 @@ window.onload = () => {
 };
 
 window.onresize = () => {
-  const [w, h] = getWindowSize();
-  //const msg = `Window resized with size width: ${w} and height: ${h}`;
-
-  //console.log(msg);
-
   if (application !== undefined) {
-    application.setSize([w, h]);
+    application.setWindowSize(getWindowSize());
   }
 };

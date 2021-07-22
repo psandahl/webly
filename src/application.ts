@@ -4,9 +4,10 @@ import { SimpleBuilding } from "./simple_building";
 import { Matrix4, Vector3, Vector4, clamp, toRadians } from "@math.gl/core";
 
 export class Application {
-  public constructor(size: [number, number]) {
-    this.size = size;
-    this.glContext = new GLContext(1920.0 / 1280.0, size);
+  public constructor(windowSize: [number, number]) {
+    this.displayAspectRatio = 1920.0 / 1280.0;
+    this.windowSize = windowSize;
+    this.glContext = new GLContext(this.displayAspectRatio, windowSize);
     this.simpleBuilding = new SimpleBuilding(this.glContext.getGl());
   }
 
@@ -22,12 +23,12 @@ export class Application {
   }
 
   /**
-   * Set the new size for the application.
+   * Set the new window size for the application.
    * @param size
    */
-  public setSize(size: [number, number]): void {
-    this.size = size;
-    this.glContext.setSize(size);
+  public setWindowSize(windowSize: [number, number]): void {
+    this.windowSize = windowSize;
+    this.glContext.setWindowSize(windowSize);
     this.simpleBuilding.setProjectionMatrix(this.projectionMatrix());
   }
 
@@ -37,7 +38,7 @@ export class Application {
    * @param deltaY Move in y.
    */
   public mouseMove(deltaX: number, deltaY: number): void {
-    const [w, h] = this.size;
+    const [w, h] = this.windowSize;
 
     this.azimuth -= (deltaX / w) * (2 * Math.PI);
     this.azimuth = this.azimuth % (2 * Math.PI);
@@ -56,11 +57,9 @@ export class Application {
   }
 
   private projectionMatrix(): Matrix4 {
-    const [w, h] = this.size;
-    const aspect = w / h;
     const param = {
       fovy: toRadians(45),
-      aspect: aspect,
+      aspect: this.displayAspectRatio,
       near: 0.1,
       far: 100,
     };
@@ -78,7 +77,8 @@ export class Application {
     return new Matrix4().lookAt(vec.scale(this.scale), [0, 0, 0], [0, 1, 0]);
   }
 
-  private size: [number, number];
+  private displayAspectRatio = 1.0;
+  private windowSize: [number, number];
   private glContext: GLContext;
   private simpleBuilding: SimpleBuilding;
   private azimuth = 0.0;

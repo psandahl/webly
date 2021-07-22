@@ -4,7 +4,7 @@ export class GLContext {
   public constructor(aspectRatio: number, size: [number, number]) {
     this.aspectRatio = aspectRatio;
     this.canvas = createCanvasElement("render-canvas");
-    this.setSize(size);
+    this.setWindowSize(size);
 
     this.gl = this.canvas.getContext("webgl2") as WebGL2RenderingContext;
     if (this.gl !== undefined) {
@@ -25,11 +25,11 @@ export class GLContext {
   }
 
   /**
-   * Set new size.
-   * @param size
+   * Set new window size.
+   * @param windowSize
    */
-  public setSize(size: [number, number]): void {
-    const [width, height] = size;
+  public setWindowSize(windowSize: [number, number]): void {
+    const [width, height] = windowSize;
 
     this.width = width;
     this.height = height;
