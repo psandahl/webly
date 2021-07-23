@@ -9,37 +9,46 @@ let mouseY = 0;
 
 window.onload = () => {
   try {
-    application = new Application(getWindowSize());
-    application.run();
+    // This is ugly. But for now ...
+    console.log("Will try to load image ...");
+    const image = new Image();
+    image.onload = (e) => {
+      console.log("Image loaded. Application start continues!");
 
-    const canvas = application.canvas();
-    canvas.addEventListener("mousedown", (e) => {
-      if (e.button == 0) {
-        mouseTracking = true;
-        mouseX = e.offsetX;
-        mouseY = e.offsetY;
-      }
-    });
+      application = new Application(image, getWindowSize());
+      application.run();
 
-    canvas.addEventListener("mousemove", (e) => {
-      if (mouseTracking) {
-        const deltaX = e.offsetX - mouseX;
-        const deltaY = e.offsetY - mouseY;
-
-        mouseX = e.offsetX;
-        mouseY = e.offsetY;
-
-        if (application !== undefined) {
-          application.mouseMove(deltaX, deltaY);
+      const canvas = application.canvas();
+      canvas.addEventListener("mousedown", (e) => {
+        if (e.button == 0) {
+          mouseTracking = true;
+          mouseX = e.offsetX;
+          mouseY = e.offsetY;
         }
-      }
-    });
+      });
 
-    canvas.addEventListener("mouseup", (e) => {
-      if (e.button == 0) {
-        mouseTracking = false;
-      }
-    });
+      canvas.addEventListener("mousemove", (e) => {
+        if (mouseTracking) {
+          const deltaX = e.offsetX - mouseX;
+          const deltaY = e.offsetY - mouseY;
+
+          mouseX = e.offsetX;
+          mouseY = e.offsetY;
+
+          if (application !== undefined) {
+            application.mouseMove(deltaX, deltaY);
+          }
+        }
+      });
+
+      canvas.addEventListener("mouseup", (e) => {
+        if (e.button == 0) {
+          mouseTracking = false;
+        }
+      });
+    };
+
+    image.src = "./data/im0.png";
   } catch (error) {
     console.error(error);
     clearBody();

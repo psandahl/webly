@@ -5,12 +5,12 @@ import { SimpleBuilding } from "./simple_building";
 import { Matrix4, Vector3, Vector4, clamp, toRadians } from "@math.gl/core";
 
 export class Application {
-  public constructor(windowSize: [number, number]) {
-    this.displayAspectRatio = 1920.0 / 1280.0;
+  public constructor(image: HTMLImageElement, windowSize: [number, number]) {
+    this.displayAspectRatio = image.width / image.height;
     this.windowSize = windowSize;
     this.glContext = new GLContext(this.displayAspectRatio, windowSize);
     this.simpleBuilding = new SimpleBuilding(this.glContext.getGl());
-    this.imageDisplay = new ImageDisplay(this.glContext.getGl());
+    this.imageDisplay = new ImageDisplay(image, this.glContext.getGl());
   }
 
   /**
