@@ -46,7 +46,7 @@ export class Application {
     this.azimuth = this.azimuth % (2 * Math.PI);
 
     this.elevation += (deltaY / h) * (2 * Math.PI);
-    this.elevation = clamp(this.elevation, toRadians(-45), toRadians(45));
+    this.elevation = clamp(this.elevation, toRadians(-60), toRadians(60));
 
     this.simpleBuilding.setViewMatrix(this.viewMatrix());
   }
@@ -63,7 +63,7 @@ export class Application {
       fovy: toRadians(45),
       aspect: this.displayAspectRatio,
       near: 0.1,
-      far: 100,
+      far: 150,
     };
 
     return new Matrix4().perspective(param);
@@ -86,5 +86,5 @@ export class Application {
   private simpleBuilding: SimpleBuilding;
   private azimuth = 0.0;
   private elevation = 0.0;
-  private scale = 20.0;
+  private scale = 100.0;
 }
