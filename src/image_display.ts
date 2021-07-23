@@ -83,6 +83,6 @@ out vec4 color;
 uniform sampler2D u_texture;
 
 void main() {
-  color = texture(u_texture, v_texCoord);
+  color = texture(u_texture, vec2(v_texCoord.x, 1.0 - v_texCoord.y));
 }`;
 }
