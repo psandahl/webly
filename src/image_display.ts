@@ -39,6 +39,7 @@ export class ImageDisplay implements Entity {
 
     gl.useProgram(null);
     this.bufferSet.unbind();
+    gl.bindTexture(gl.TEXTURE_2D, null);
   }
 
   // Per vertex: x y (z defaults to zero) u v.
