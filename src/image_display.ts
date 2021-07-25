@@ -15,7 +15,7 @@ export class ImageDisplay implements Entity {
       this.fragmentShader
     );
 
-    this.texture = gl.createTexture()!;    
+    this.texture = gl.createTexture()!;
     gl.bindTexture(gl.TEXTURE_2D, this.texture);
     gl.activeTexture(gl.TEXTURE0);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
@@ -24,7 +24,10 @@ export class ImageDisplay implements Entity {
     gl.bindTexture(gl.TEXTURE_2D, null);
   }
 
-  public render(gl: WebGL2RenderingContext): void {
+  public render(
+    gl: WebGL2RenderingContext,
+    viewport: [number, number, number, number]
+  ): void {
     this.bufferSet.bind();
     gl.useProgram(this.program);
 

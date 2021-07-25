@@ -26,7 +26,10 @@ export class SimpleBuilding implements Entity {
     this._modelMatrixU = gl.getUniformLocation(this._program, "u_modelMatrix")!;
   }
 
-  public render(gl: WebGL2RenderingContext): void {
+  public render(
+    gl: WebGL2RenderingContext,
+    viewport: [number, number, number, number]
+  ): void {
     this._bufferSet.bind();
     gl.useProgram(this._program);
 

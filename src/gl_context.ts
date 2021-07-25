@@ -93,7 +93,7 @@ export class GLContext {
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
     this.entities.forEach((entity) => {
-      entity.render(this.gl);
+      entity.render(this.gl, [startX, startY, viewportWidth, viewportHeight]);
     });
 
     requestAnimationFrame(this.render.bind(this));
