@@ -6,7 +6,7 @@ import { Matrix4, Vector3, Vector4, clamp, toRadians } from "@math.gl/core";
 
 export class Application {
   public constructor(image: HTMLImageElement, windowSize: [number, number]) {
-    this.displayAspectRatio = image.width / image.height;
+    this.displayAspectRatio = image.naturalWidth / image.naturalHeight;
     this.windowSize = windowSize;
     this.glContext = new GLContext(this.displayAspectRatio, windowSize);
     this.simpleBuilding = new SimpleBuilding(this.glContext.getGl());
