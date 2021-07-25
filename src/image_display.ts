@@ -17,6 +17,7 @@ export class ImageDisplay implements Entity {
 
     this.texture = gl.createTexture()!;    
     gl.bindTexture(gl.TEXTURE_2D, this.texture);
+    gl.activeTexture(gl.TEXTURE0);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
     gl.generateMipmap(gl.TEXTURE_2D);
 
@@ -30,7 +31,6 @@ export class ImageDisplay implements Entity {
     // The image must not write any depth info.
     gl.disable(gl.DEPTH_TEST);
 
-    gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, this.texture);
 
     gl.drawArrays(gl.TRIANGLES, 0, this.data.length / 4);
