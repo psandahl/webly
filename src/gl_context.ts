@@ -13,6 +13,13 @@ export class GLContext {
       throw new Error("Unable to create WebGL2 context");
     }
 
+    const texture_float_linear = this.gl.getExtension(
+      "OES_texture_float_linear"
+    );
+    if (texture_float_linear === null) {
+      throw new Error("Failed to enable extension 'OES_texture_float_linear'");
+    }
+
     this.initialGLSetup();
   }
 
