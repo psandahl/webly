@@ -93,5 +93,5 @@ export class Application {
   private simpleBuilding: SimpleBuilding;
   private azimuth = 0.0;
   private elevation = 0.0;
-  private scale = 100.0;
+  private scale = 20.0;
 }

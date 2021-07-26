@@ -16,6 +16,24 @@ export class SimpleBuilding implements Entity {
       this.fragmentShader
     );
 
+    const [image, width, height] = depthImage;
+    this.texture = gl.createTexture()!;
+    gl.bindTexture(gl.TEXTURE_2D, this.texture);
+    gl.activeTexture(gl.TEXTURE0);
+    gl.texImage2D(
+      gl.TEXTURE_2D,
+      0,
+      gl.R32F,
+      width,
+      height,
+      0,
+      gl.RED,
+      gl.FLOAT,
+      image
+    );
+
+    gl.bindTexture(gl.TEXTURE_2D, null);
+
     this.projectionMatrix = new Matrix4().identity();
     this.projectionMatrixU = gl.getUniformLocation(
       this.program,
@@ -35,6 +53,8 @@ export class SimpleBuilding implements Entity {
   ): void {
     this.bufferSet.bind();
     gl.useProgram(this.program);
+
+    gl.bindTexture(gl.TEXTURE_2D, this.texture);
 
     gl.uniformMatrix4fv(
       this.projectionMatrixU,
@@ -56,6 +76,7 @@ export class SimpleBuilding implements Entity {
 
     gl.useProgram(null);
     this.bufferSet.unbind();
+    gl.bindTexture(gl.TEXTURE_2D, null);
   }
 
   public setProjectionMatrix(mat: Matrix4): void {
@@ -72,6 +93,7 @@ export class SimpleBuilding implements Entity {
 
   private bufferSet: BufferSet;
   private program: WebGLProgram;
+  private texture: WebGLTexture;
   private projectionMatrix: Matrix4;
   private projectionMatrixU: WebGLUniformLocation;
   private viewMatrix: Matrix4;
@@ -209,6 +231,8 @@ precision highp float;
 
 in vec3 v_color;
 out vec4 color;
+
+uniform sampler2D u_depth;
 
 void main() {
   color = vec4(v_color, 1);
