@@ -5,7 +5,10 @@ import { Matrix4 } from "@math.gl/core";
 import Matrix from "@math.gl/core/src/classes/base/matrix";
 
 export class SimpleBuilding implements Entity {
-  public constructor(gl: WebGL2RenderingContext) {
+  public constructor(
+    depthImage: [Float32Array, number, number],
+    gl: WebGL2RenderingContext
+  ) {
     this._bufferSet = new BufferSet(gl, [3, 3], this._data);
     this._program = compileShaderProgram(
       gl,

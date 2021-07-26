@@ -1,5 +1,6 @@
 import { Application } from "./application";
 import { getWindowSize, clearBody, appendBody } from "./dom";
+import { radians } from "@math.gl/core";
 
 let application: Application;
 
@@ -15,7 +16,10 @@ window.onload = () => {
     image.onload = (e) => {
       console.log("Image loaded. Application start continues!");
 
-      application = new Application(image, getWindowSize());
+      // Make a fake depth image.
+      const depthImage = fakeDepthImage(64, radians(-25), 20.0);
+
+      application = new Application(image, depthImage, getWindowSize());
       application.run();
 
       const canvas = application.canvas();
@@ -64,3 +68,22 @@ window.onresize = () => {
     application.setWindowSize(getWindowSize());
   }
 };
+
+function fakeDepthImage(
+  dim: number,
+  theta: number,
+  baseDepth: number
+): [Float32Array, number, number] {
+  let image = new Float32Array(dim * dim);
+
+  let index = 0;
+  for (let row = 0; row < dim; ++row) {
+    const offset = (row - Math.round(dim / 2)) * Math.tan(theta);
+
+    for (let col = 0; col < dim; ++col) {
+      image[index++] = baseDepth + offset;
+    }
+  }
+
+  return [image, dim, dim];
+}
