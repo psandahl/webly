@@ -20,13 +20,15 @@ export class SimpleBuilding implements Entity {
     this.texture = gl.createTexture()!;
     gl.bindTexture(gl.TEXTURE_2D, this.texture);
     gl.activeTexture(gl.TEXTURE0);
-    gl.texImage2D(
+
+    gl.texStorage2D(gl.TEXTURE_2D, 1, gl.R32F, width, height);
+    gl.texSubImage2D(
       gl.TEXTURE_2D,
       0,
-      gl.R32F,
+      0,
+      0,
       width,
       height,
-      0,
       gl.RED,
       gl.FLOAT,
       image
@@ -45,6 +47,12 @@ export class SimpleBuilding implements Entity {
 
     this.modelMatrix = new Matrix4().identity();
     this.modelMatrixU = gl.getUniformLocation(this.program, "u_modelMatrix")!;
+
+    this.viewportOriginU = gl.getUniformLocation(
+      this.program,
+      "u_viewportOrigin"
+    )!;
+    this.viewportSizeU = gl.getUniformLocation(this.program, "u_viewportSize")!;
   }
 
   public render(
@@ -70,6 +78,14 @@ export class SimpleBuilding implements Entity {
       this.modelMatrixU,
       false,
       this.modelMatrix.toFloat32Array()
+    );
+    gl.uniform2fv(
+      this.viewportOriginU,
+      new Float32Array([viewport[0], viewport[1]])
+    );
+    gl.uniform2fv(
+      this.viewportSizeU,
+      new Float32Array([viewport[2], viewport[3]])
     );
 
     gl.drawArrays(gl.TRIANGLES, 0, this.data.length / 6);
@@ -100,6 +116,8 @@ export class SimpleBuilding implements Entity {
   private viewMatrixU: WebGLUniformLocation;
   private modelMatrix: Matrix4;
   private modelMatrixU: WebGLUniformLocation;
+  private viewportOriginU: WebGLUniformLocation;
+  private viewportSizeU: WebGLUniformLocation;
 
   // Per vertex: x y z r g b
   private readonly data = [
@@ -217,11 +235,13 @@ uniform mat4 u_viewMatrix;
 uniform mat4 u_modelMatrix;
 
 out vec3 v_color;
+out vec4 v_position;
 
 void main() {
   mat4 mat = u_projectionMatrix * u_viewMatrix * u_modelMatrix;
 
   v_color = a_color;
+  v_position = (u_viewMatrix * u_modelMatrix) * a_position;
   gl_Position = mat * a_position;
 }`;
 
@@ -230,11 +250,21 @@ void main() {
 precision highp float;
 
 in vec3 v_color;
+in vec4 v_position;
 out vec4 color;
 
 uniform sampler2D u_depth;
+uniform vec2 u_viewportOrigin;
+uniform vec2 u_viewportSize;
 
 void main() {
+  vec2 uv = (gl_FragCoord.xy - u_viewportOrigin) / u_viewportSize;
+  // Flip y.
+  uv.y = 1.0 - uv.y;
+
+  float depth = texture(u_depth, uv).r;
+  if (-v_position.z > depth) discard;
+  
   color = vec4(v_color, 1);
 }`;
 }
