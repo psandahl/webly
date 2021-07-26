@@ -9,78 +9,78 @@ export class SimpleBuilding implements Entity {
     depthImage: [Float32Array, number, number],
     gl: WebGL2RenderingContext
   ) {
-    this._bufferSet = new BufferSet(gl, [3, 3], this._data);
-    this._program = compileShaderProgram(
+    this.bufferSet = new BufferSet(gl, [3, 3], this.data);
+    this.program = compileShaderProgram(
       gl,
-      this._vertexShader,
-      this._fragmentShader
+      this.vertexShader,
+      this.fragmentShader
     );
 
-    this._projectionMatrix = new Matrix4().identity();
-    this._projectionMatrixU = gl.getUniformLocation(
-      this._program,
+    this.projectionMatrix = new Matrix4().identity();
+    this.projectionMatrixU = gl.getUniformLocation(
+      this.program,
       "u_projectionMatrix"
     )!;
 
-    this._viewMatrix = new Matrix4().identity();
-    this._viewMatrixU = gl.getUniformLocation(this._program, "u_viewMatrix")!;
+    this.viewMatrix = new Matrix4().identity();
+    this.viewMatrixU = gl.getUniformLocation(this.program, "u_viewMatrix")!;
 
-    this._modelMatrix = new Matrix4().identity();
-    this._modelMatrixU = gl.getUniformLocation(this._program, "u_modelMatrix")!;
+    this.modelMatrix = new Matrix4().identity();
+    this.modelMatrixU = gl.getUniformLocation(this.program, "u_modelMatrix")!;
   }
 
   public render(
     gl: WebGL2RenderingContext,
     viewport: [number, number, number, number]
   ): void {
-    this._bufferSet.bind();
-    gl.useProgram(this._program);
+    this.bufferSet.bind();
+    gl.useProgram(this.program);
 
     gl.uniformMatrix4fv(
-      this._projectionMatrixU,
+      this.projectionMatrixU,
       false,
-      this._projectionMatrix.toFloat32Array()
+      this.projectionMatrix.toFloat32Array()
     );
     gl.uniformMatrix4fv(
-      this._viewMatrixU,
+      this.viewMatrixU,
       false,
-      this._viewMatrix.toFloat32Array()
+      this.viewMatrix.toFloat32Array()
     );
     gl.uniformMatrix4fv(
-      this._modelMatrixU,
+      this.modelMatrixU,
       false,
-      this._modelMatrix.toFloat32Array()
+      this.modelMatrix.toFloat32Array()
     );
 
-    gl.drawArrays(gl.TRIANGLES, 0, this._data.length / 6);
+    gl.drawArrays(gl.TRIANGLES, 0, this.data.length / 6);
 
     gl.useProgram(null);
-    this._bufferSet.unbind();
+    this.bufferSet.unbind();
   }
 
   public setProjectionMatrix(mat: Matrix4): void {
-    this._projectionMatrix = mat;
+    this.projectionMatrix = mat;
   }
 
   public setViewMatrix(mat: Matrix4): void {
-    this._viewMatrix = mat;
+    this.viewMatrix = mat;
   }
 
   public setModelMatrix(mat: Matrix4): void {
-    this._modelMatrix = mat;
+    this.modelMatrix = mat;
   }
 
-  private _bufferSet: BufferSet;
-  private _program: WebGLProgram;
-  private _projectionMatrix: Matrix4;
-  private _projectionMatrixU: WebGLUniformLocation;
-  private _viewMatrix: Matrix4;
-  private _viewMatrixU: WebGLUniformLocation;
-  private _modelMatrix: Matrix4;
-  private _modelMatrixU: WebGLUniformLocation;
+  private bufferSet: BufferSet;
+  private program: WebGLProgram;
+  private projectionMatrix: Matrix4;
+  private projectionMatrixU: WebGLUniformLocation;
+  private viewMatrix: Matrix4;
+  private viewMatrixU: WebGLUniformLocation;
+  private modelMatrix: Matrix4;
+  private modelMatrixU: WebGLUniformLocation;
 
   // Per vertex: x y z r g b
-  private readonly _data = [
+  private readonly data = [
     // First wall - short side positive z.
     -2.0, 3.0, 3.0, 1.0, 0.0, 0.0,
 
@@ -185,7 +185,7 @@ export class SimpleBuilding implements Entity {
     2.0, 0.0, 3.0, 0.0, 0.0, 1.0,
   ];
 
-  private readonly _vertexShader = `#version 300 es
+  private readonly vertexShader = `#version 300 es
 
 layout (location = 0) in vec4 a_position;
 layout (location = 1) in vec3 a_color;
@@ -203,7 +203,7 @@ void main() {
   gl_Position = mat * a_position;
 }`;
 
-  private readonly _fragmentShader = `#version 300 es
+  private readonly fragmentShader = `#version 300 es
 
 precision highp float;
 
