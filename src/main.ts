@@ -1,6 +1,6 @@
 import { Application } from "./application";
 import { getWindowSize, clearBody, appendBody } from "./dom";
-import { radians } from "@math.gl/core";
+import { Matrix4, Pose, radians } from "@math.gl/core";
 
 let application: Application;
 
@@ -8,7 +8,43 @@ let mouseTracking = false;
 let mouseX = 0;
 let mouseY = 0;
 
+// A few silly functions for camera transform testing.
+function camOpenGL() {
+  const cam = new Matrix4().lookAt([0, 0, 10], [0, 0, 0], [0, 1, 0]);
+  let result: number[] = [];
+  const center = cam.transformAsPoint([0, 0, 0], result);
+  console.log("camOpenGL center: ", center);
+
+  const ul = cam.transformAsPoint([-1, 1, 0], result);
+  console.log("camOpenGL ul: ", ul);
+}
+
+function camECEF() {
+  const pose = new Pose({
+    x: 10,
+    y: 0,
+    z: 0,
+    yaw: radians(0),
+    pitch: radians(0),
+    roll: radians(0),
+  });
+
+  const cam = pose.getTransformationMatrix().invert();
+
+  //console.log("mat: ", cam);
+
+  let result: number[] = [];
+  const center = cam.transformAsPoint([0, 0, 0], result);
+  console.log("camECEF center: ", center);
+
+  const ul = cam.transformAsPoint([0, -1, 1], result);
+  console.log("camECEF ul: ", ul);
+}
+
 window.onload = () => {
+  //camOpenGL();
+  //camECEF();
+
   try {
     // This is ugly. But for now ...
     console.log("Will try to load image ...");
