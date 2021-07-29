@@ -41,9 +41,37 @@ function camECEF() {
   console.log("camECEF ul: ", ul);
 }
 
+function camNED() {
+  const pose = new Pose({
+    x: -2208039.5330739156,
+    y: -4879520.1039087232,
+    z: 3457784.4159664311,
+    yaw: radians(99.341067507018877),
+    pitch: radians(-30.462887267059706),
+    roll: radians(148.67312666606449),
+  });
+
+  const cam = pose.getTransformationMatrix().invert();
+  let result: number[] = [];
+  const center = cam.transformAsPoint(
+    [-2209364.927517795, -4871462.6201173449, 3462587.2972338162],
+    result
+  );
+
+  console.log("camNED center: ", center);
+
+  const ul = cam.transformAsPoint(
+    [-2209410.8340384108, -4871421.8375324365, 3462613.8061516923],
+    result
+  );
+
+  console.log("camNED ul: ", ul);
+}
+
 window.onload = () => {
   //camOpenGL();
   //camECEF();
+  //camNED();
 
   try {
     // This is ugly. But for now ...
